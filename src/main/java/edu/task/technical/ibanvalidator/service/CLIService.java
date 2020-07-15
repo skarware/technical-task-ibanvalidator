@@ -13,11 +13,11 @@ public class CLIService {
         System.out.println("C - Start IBAN validation API on port 8080");
         System.out.println("E - Exit Program");
         System.out.println(sepLine);
-        System.out.print("Enter option: ");
+        System.out.print("Enter your option: ");
     }
 
-    public String getUserInputString() {
-        System.out.print("Please enter IBAN: ");
+    public String getUserInputString(String outputMsg) {
+        System.out.print(outputMsg);
         return new Scanner(System.in).next();
     }
 
@@ -57,6 +57,5 @@ public class CLIService {
         System.err.printf("%s - There is no such option, try again.\n", ((Character) key).toString());
         return false;
     }
-
 
 }

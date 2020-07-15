@@ -1,17 +1,25 @@
 package edu.task.technical.ibanvalidator.service;
 
+import edu.task.technical.ibanvalidator.Model.IBAN;
 import org.apache.commons.validator.routines.IBANValidator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class IBANValidationService {
+
+    // Initialize IBAN codes list
+    private final List<IBAN> ibanCodeList = new ArrayList<>();
 
     // Get a singleton instance of the IBAN validator using the default formats
     private final IBANValidator ibanValidator = IBANValidator.getInstance();
 
     // Get dependencies
     private final CLIService cliService = new CLIService();
+    private final FileService fileService = new FileService();
 
     // Prints passed IBAN code and its validation to STDOUT
-    public void printCodeAndValidation(String ibanCode) {
+    private void printCodeAndValidation(String ibanCode) {
         String codeAndValidity = "'" + ibanCode + "'" + " is " + (ibanValidator.isValid(ibanCode) ? "Valid" : "Not valid") + " IBAN;\n";
         System.out.println(codeAndValidity);
     }
@@ -53,12 +61,12 @@ public class IBANValidationService {
         // useOption returns 3 different ways to flow for a program
         if (userOption == 97 || userOption == 65) { // if key == 'a' or A
             // Let user to input IBAN then check it and print its validation to STDOUT
-            String ibanCode = cliService.getUserInputString();
-            printCodeAndValidation(ibanCode);
+            String ibanCode = cliService.getUserInputString("Please enter IBAN: ");
+            this.printCodeAndValidation(ibanCode);
 
         } else if (userOption == 98 || userOption == 66) { // if key == 'b' or B
-            // Let user to input path to the file with IBANs then parse it, check validation print the result to STDOUT and save to other file
-            System.out.println("Sorry, File functionality has not been yet implemented");
+            // Read IBANs from file, validate and save the result to other file
+            this.readIBANsFileValidateSaveResult(this.ibanCodeList);
 
         } else if (userOption == 99 || userOption == 67) { // if key == 'c' or C
             // TODO: invoke servlet API
@@ -73,5 +81,29 @@ public class IBANValidationService {
         this.start();
     }
 
+    private void readIBANsFileValidateSaveResult(List<IBAN> ibanCodeList) {
+        // Let user to input path to the file with IBANs
+        String filePath = cliService.getUserInputString("Please full File path: ");
+
+        // Set filePath inside fileService
+        this.fileService.setFilePath(filePath);
+
+        // Parse the file for IBANs List
+        this.fileService.readIBANCodesFromFile(ibanCodeList);
+
+        // Iterate through List
+        ibanCodeList.forEach((el) -> {
+            // Validate IBANs
+            el.isValid(this.ibanValidator.isValid(el.getCode()));
+
+            // Print the result to STDOUT
+            System.out.println(el.toString());
+            ;
+        });
+
+        // TODO: Save result to other file with .out extension
+
+
+    }
 
 }

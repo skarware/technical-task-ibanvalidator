@@ -84,7 +84,7 @@ public class IBANValidationService {
 
     private void readIBANsFileValidateSaveResult(List<IBAN> ibanCodeList) {
         // Let user to input path to the file with IBANs
-        String filePath = cliService.getUserInputString("Please full File path: ");
+        String filePath = cliService.getUserInputString("Please provide File path: ");
 
         // Set filePath inside fileService
         this.fileService.setFilePath(filePath);

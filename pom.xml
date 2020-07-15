@@ -39,7 +39,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        edu.edu.task.technical.ibanvalidator.Main
+                                        edu.task.technical.ibanvalidator.Main
                                     </mainClass>
                                 </manifest>
                             </archive>

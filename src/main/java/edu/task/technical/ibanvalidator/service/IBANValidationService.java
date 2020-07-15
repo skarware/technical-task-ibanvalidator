@@ -17,6 +17,8 @@ public class IBANValidationService {
     // Get dependencies
     private final CLIService cliService = new CLIService();
     private final FileService fileService = new FileService();
+    private final HttpService httpService = new HttpService();
+
 
     // Prints passed IBAN code and its validation to STDOUT
     private void printCodeAndValidation(String ibanCode) {
@@ -28,16 +30,39 @@ public class IBANValidationService {
     public void start(String[] args) {
         // Check if arguments from command line passed has an API argument
         if (args.length > 0) {
+            // If so then run as WEB service and expose API endpoint
             if (args[0].toLowerCase().equals("api")) {
-                // if so then run as WEB service and expose API endpoints
-                // TODO: implement servlet to provide REST API service
-                System.err.println("Sorry, API functionality has not been yet implemented");
+                this.initiateAPIMode(args);
             } else {
                 System.err.println("Unknown option, try 'api'");
             }
         } else {
             // Else run command line interface version
             this.start();
+        }
+    }
+
+    private void initiateAPIMode(String[] args) {
+        // Default port to 8080
+        int port = 8080;
+
+        // If port passed as a second argument then parse it as integer and pass as the argument to a httpServer or exit program on error
+        if (args.length > 1) {
+            if (args[1] != null) {
+                try {
+                    port = Integer.parseInt(args[1]);
+                } catch (NumberFormatException exception) {
+                    System.err.println("Could not parse port number, make sure it is a number");
+                    exitProgram();
+                }
+            }
+        }
+        // Try to start Http Server, if any problem exit the program
+        try {
+            this.httpService.start(port);
+        } catch (Exception e) {
+            System.err.println("Could not start Http server");
+            exitProgram();
         }
     }
 
@@ -49,6 +74,13 @@ public class IBANValidationService {
     // Procedure to exit a program
     private void exitProgram() {
         System.out.println("\n\tProgram exiting,\n\t\t\t see you...");
+
+        // Wait for http server operations to finish before exiting program
+        try {
+            this.httpService.stop();
+        } catch (Exception e) {
+            System.err.println("Failed to gracefully stop Http Server");
+        }
 
         // exit the application
         System.exit(0);
@@ -70,8 +102,8 @@ public class IBANValidationService {
             this.readIBANsFileValidateSaveResult(this.ibanCodeList);
 
         } else if (userOption == 99 || userOption == 67) { // if key == 'c' or C
-            // TODO: invoke servlet API
-            System.out.println("Sorry, API functionality has not been yet implemented");
+            // Invoke servlet API
+            this.initiateAPIMode(new String[]{});
 
         } else if (userOption == 101 || userOption == 69) { // if key == 'e' or E
             // Exit the program

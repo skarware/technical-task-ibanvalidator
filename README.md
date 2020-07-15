@@ -4,11 +4,11 @@
 
 ## About the app
 
-One of technical tasks I got while looking for my first software developer position. Application made using <i><b>Java 11, commons-validator and Maven</b></i>.
+One of technical tasks I got while looking for my first software developer position. Made using <i><b>Java 11, commons-validator and Maven</b></i>.
  
-Validate IBAN input by User into terminal or from given file, result saved in *.out file;\
+Program validates IBAN by entering it into terminal or from given file, result saved in *.out file;\
 Can be run as standalone WEB service* for IBAN validation through API on port 8080;\
-App uses commons-validator library to validate IBANs.
+Program uses commons-validator library to validate IBANs.
 
 _*Functionality not yet implemented._
 
@@ -37,7 +37,7 @@ To run the program use java JRE with executable JAR file with no arguments or wi
 ```
 java -jar target/ibanvalidator-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
-If all went well you should see interactive User Interface printed to stdout:
+If all went well you should see interactive User Interface printed to STDOUT:
 ```
 skarware@citadel:~technical-task-ibanvalidator$ java -jar target/ibanvalidator-1.0-SNAPSHOT-jar-with-dependencies.jar
 ----------------------------------------------------------------------------
@@ -48,10 +48,21 @@ E - Exit Program
 ----------------------------------------------------------------------------
 Enter your option:
 ```
-If option B chosen and IBAN input file provided, in example `IBANList.txt`, program will parse the file, print the result to STDOUT and save it into other file: `IBANList.txt.out`:
+If option A chosen, enter single IBAN into a terminal window, program will print the result into STDOUT:
+```
+Your option: A
+Please enter IBAN: LT647044001231465456
+'LT647044001231465456' is Valid IBAN;
+```
+```
+Your option: A
+Please enter IBAN: LT227044077788877777
+'LT227044077788877777' is Not valid IBAN;
+```
+If option B chosen and IBAN input file provided, in example `IBANList.txt`, program will parse the file, print the result to STDOUT and Saves it into other file named: `IBANList.txt.out`:
 ```
 Your option: B
-Please full File path: IBANList.txt
+Please provide File path: IBANList.txt
 Reading IBAN codes from a FILE...       data successfully loaded.
 AA051245445454552117989,false
 LT647044001231465456,true

@@ -54,6 +54,7 @@ public class IBANValidationService {
         System.exit(0);
     }
 
+    // Initiate CLI Main Menu for UI
     private void initiateCLIMainMenu() {
         // Print main menu and get user option
         int userOption = cliService.printMainMenuAndGetUserOption();
@@ -89,21 +90,22 @@ public class IBANValidationService {
         this.fileService.setFilePath(filePath);
 
         // Parse the file for IBANs List
-        this.fileService.readIBANCodesFromFile(ibanCodeList);
+        boolean readFileSuccessfully = this.fileService.readIBANCodesFromFile(ibanCodeList);
 
-        // Iterate through List
-        ibanCodeList.forEach((el) -> {
-            // Validate IBANs
-            el.isValid(this.ibanValidator.isValid(el.getCode()));
+        // If file parsed successfully only then:
+        if (readFileSuccessfully) {
+            // Iterate through List
+            ibanCodeList.forEach((el) -> {
+                // Validate IBANs
+                el.isValid(this.ibanValidator.isValid(el.getCode()));
 
-            // Print the result to STDOUT
-            System.out.println(el.toString());
-            ;
-        });
+                // Print the result to STDOUT
+                System.out.println(el.toString());
+            });
 
-        // TODO: Save result to other file with .out extension
-
-
+            // Save result to other file with .out extension
+            this.fileService.writeIBANCodesValidityIntoFile(ibanCodeList);
+        }
     }
 
 }

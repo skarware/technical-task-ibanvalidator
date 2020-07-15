@@ -23,13 +23,22 @@ public class FileUtil {
 
         } catch (IOException e) {
             System.err.println("ERROR: Caught IOException while trying to read FILE: + " + filePath + ", Error message: \n" + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
 
     public static boolean writeFile(String string, String fileName, boolean append) {
         try (PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(fileName, append)))) {
+            printWriter.println(string);
+            return true;
+        } catch (IOException e) {
+            System.err.println("ERROR: Caught IOException while trying to write into FILE: \n" + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean writeFile(String string, File file, boolean append) {
+        try (PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(file, append)))) {
             printWriter.println(string);
             return true;
         } catch (IOException e) {
